@@ -1,30 +1,32 @@
-﻿using Projeto.Models;
+﻿using System;
 
-namespace Projeto;
-
-public class Autor{
-
-    private static int ultimoId = 0;
-    public Autor()
+namespace Projeto.Models
+{
+    public class Autor
     {
-        if (AutorId == 0)
-        {
-            AutorId = ++ultimoId;
-        }
-    }
+        private static int ultimoId = 0;
 
-    public Autor(string nome, string nacionalidade)
-    {
-        if (AutorId == 0)
+        public Autor()
         {
-            AutorId = ++ultimoId;
+            if (AutorId == 0)
+            {
+                AutorId = ++ultimoId;
+            }
         }
-        Nome = nome;
-        Nacionalidade = nacionalidade;
-    }
 
-    public int AutorId { get; set; }
-    public string? Nome { get; set; }
-    public string? Nacionalidade { get; set; }
-    public DateTime DataNascimento { get; set; }
+        public Autor(string nome, string nacionalidade)
+        {
+            if (AutorId == 0)
+            {
+                AutorId = ++ultimoId;
+            }
+            Nome = nome;
+            Nacionalidade = nacionalidade;
+        }
+
+        public int AutorId { get; set; }
+        public string? Nome { get; set; }
+        public string? Nacionalidade { get; set; }
+        public DateTime DataNascimento { get; set; }
+    }
 }
