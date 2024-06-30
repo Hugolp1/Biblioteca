@@ -19,7 +19,7 @@ namespace Projeto.Models
         {
             base.OnModelCreating(modelBuilder);
 
-            // Configurações adicionais de mapeamento (opcional)
+            
             modelBuilder.Entity<Emprestimo>()
                 .HasOne(e => e.Livro)
                 .WithMany(l => l.Emprestimos)
@@ -30,7 +30,7 @@ namespace Projeto.Models
                 .WithMany(u => u.Emprestimos)
                 .HasForeignKey(e => e.UsuarioId);
 
-            // Configurações adicionais para Reserva
+           
             modelBuilder.Entity<Reserva>()
                 .HasOne(r => r.Livro)
                 .WithMany(l => l.Reservas)
