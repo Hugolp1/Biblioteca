@@ -1,8 +1,7 @@
 using System.Collections.Generic;
-
-namespace Projeto.Models
-{
-    public class Usuario
+using Projeto.Models;
+namespace Projeto.Models;
+public class Usuario
     {
         public Usuario()
         {
@@ -11,9 +10,8 @@ namespace Projeto.Models
         }
 
         public int Id { get; set; }
-        public string Nome { get; set; }
-        public string Email { get; set; }
+        public string? Nome { get; set; }
+        public string? Email { get; set; }
         public List<Emprestimo> Emprestimos { get; set; }
         public List<Reserva> Reservas { get; set; } // Adicionado
-    }
 }

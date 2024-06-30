@@ -1,7 +1,6 @@
 ﻿using System;
 
-namespace Projeto.Models
-{
+namespace Projeto.Models;
     public class Autor
     {
         private static int ultimoId = 0;
@@ -29,4 +28,3 @@ namespace Projeto.Models
         public string? Nacionalidade { get; set; }
         public DateTime DataNascimento { get; set; }
     }
-}

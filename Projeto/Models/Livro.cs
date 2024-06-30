@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Projeto.Models
-{
+namespace Projeto.Models;
     public class Livro
     {
         public Livro()
@@ -30,4 +29,3 @@ namespace Projeto.Models
         public List<Emprestimo> Emprestimos { get; set; }
         public List<Reserva> Reservas { get; set; } // Adicionado
     }
-}

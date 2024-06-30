@@ -9,7 +9,7 @@ Content-Type: application/json
 {
     "Titulo": "Orgulho e Preconceito",
     "Genero": "Romance",
-    "AutorId": 2,
+    "AutorId": 1,
     "NumeroExemplares": 10
 }
 
@@ -18,11 +18,11 @@ GET {{base_url}}/livro/listar
 Content-Type: application/json
 
 ###Remoção de um livro
-DELETE {{base_url}}/livro/deletar/fcd6a685-2037-4c3a-a116-875394e1b47f
+DELETE {{base_url}}/livro/deletar/c1f1cd19-040f-427d-9b8b-99f45f7e6dd2
 Content-Type: application/json
 
 ###Alteração de um livro
-PUT {{base_url}}/livro/alterar/58f58dd4-a6cd-4e04-9056-a53e33dee115
+PUT {{base_url}}/livro/alterar/01ce27b6-6b9f-49fb-b820-f6d3f9337640
 Content-Type: application/json
 
 {

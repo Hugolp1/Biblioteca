@@ -1,17 +1,28 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
 using Projeto.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<AppDbContext>();
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll",
+        builder =>
+        {
+            builder.AllowAnyOrigin()
+                   .AllowAnyMethod()
+                   .AllowAnyHeader();
+        });
+});
 var app = builder.Build();
 
 app.MapGet("/", () => "Biblioteca de Livros!");
 
 app.MapPost("/api/livro/cadastrar", ([FromBody] Livro livro, [FromServices] AppDbContext ctx) =>
 {
-    var autor = ctx.Autores.FirstOrDefault(a => a.Id == livro.AutorId);
+    var autor = ctx.Autores.FirstOrDefault(a => a.AutorId == livro.AutorId);
 
     if (autor == null)
     {
@@ -33,8 +44,8 @@ app.MapGet("/api/livro/listar", ([FromServices] AppDbContext ctx) => {
     return Results.NotFound("Não existem livros cadastrados");
 });
 
-app.MapDelete("/api/livro/deletar/{id}", ([FromRoute]int id, [FromServices] AppDbContext ctx) =>{
-    var livro = ctx.Livros.FirstOrDefault(x => x.Id == id);
+app.MapDelete("/api/livro/deletar/{id}", ([FromRoute]string id, [FromServices] AppDbContext ctx) =>{
+    var livro = ctx.Livros.FirstOrDefault(x => x.LivroId == id);
     if (livro == null){
         return Results.NotFound("Livro não encontrado!");
     }
@@ -45,9 +56,9 @@ app.MapDelete("/api/livro/deletar/{id}", ([FromRoute]int id, [FromServices] AppD
     return Results.Ok("Livro deletado!");
 });
 
-app.MapPut("api/livro/alterar/{id}", ([FromRoute]int id, Livro novoLivro, [FromServices] AppDbContext ctx) =>
+app.MapPut("api/livro/alterar/{id}", ([FromRoute]string id, Livro novoLivro, [FromServices] AppDbContext ctx) =>
 {
-    Livro? livro = ctx.Livros.FirstOrDefault(x => x.Id == id);
+    Livro? livro = ctx.Livros.FirstOrDefault(x => x.LivroId == id);
     if (livro == null)
     {
         return Results.NotFound("Livro não encontrado!");
@@ -115,12 +126,12 @@ app.MapDelete("/api/usuario/deletar/{id}", ([FromRoute]int id, [FromServices] Ap
 });
 
 // CRUD para Emprestimo
-app.MapGet("/api/emprestimo/listar", async (AppDbContext ctx) =>
+app.MapGet("/api/emprestimo/listar", (AppDbContext ctx) =>
 {
-    return await ctx.Emprestimos
-        .Include(e => e.Livro)
-        .Include(e => e.Usuario)
-        .ToListAsync();
+    if(ctx.Emprestimos.Any()){
+        return Results.Ok(ctx.Emprestimos.Include(e=>e.Livro).Include(e=>e.Usuario).ToList());
+    }
+    return Results.NotFound("Não existem emprestimos cadastrados");
 });
 
 app.MapGet("/api/emprestimo/{id}", async (int id, AppDbContext ctx) =>
@@ -148,7 +159,6 @@ app.MapPut("/api/emprestimo/alterar/{id}", async (int id, Emprestimo emprestimo,
     emprestimoExistente.LivroId = emprestimo.LivroId;
     emprestimoExistente.UsuarioId = emprestimo.UsuarioId;
     emprestimoExistente.DataEmprestimo = emprestimo.DataEmprestimo;
-    emprestimoExistente.DataDevolucao = emprestimo.DataDevolucao;
 
     await ctx.SaveChangesAsync();
     return Results.NoContent();
@@ -164,4 +174,12 @@ app.MapDelete("/api/emprestimo/deletar/{id}", async (int id, AppDbContext ctx) =
     return Results.NoContent();
 });
 
+app.MapPost("/api/reserva/cadastrar", async (Reserva reserva, AppDbContext ctx) =>
+{
+    ctx.Reservas.Add(reserva);
+    await ctx.SaveChangesAsync();
+    return Results.Created("", reserva);
+});
+
+app.UseCors("AllowAll");
 app.Run();
