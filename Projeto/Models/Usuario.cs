@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace MyProject.Models
+namespace Projeto.Models
 {
     public class Usuario
     {
